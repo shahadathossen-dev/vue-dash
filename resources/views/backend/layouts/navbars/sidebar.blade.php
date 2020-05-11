@@ -48,68 +48,6 @@
             </div>
         </li>
 
-        <li class="nav-item {{ $activePage == 'messages.panel' ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('messages.panel') }}">
-                <i class="material-icons">android</i>
-                <p> Messages</p>
-            </a>
-        </li>
-
-        <li class="nav-item {{ $activePage == 'sections.slider' || $activePage == 'sections.upcoming' || $activePage == 'sections.projects' || $activePage == 'sections.contact' || $activePage == 'sections.about' ? 'active' : '' }}">
-            <a class="nav-link" data-toggle="collapse" href="#SectionGroupMenu" aria-expanded="{{ $activePage == 'sections.navbar' || $activePage == 'sections.slider' || $activePage == 'sections.upcoming' || $activePage == 'sections.projects' || $activePage == 'sections.contact' || $activePage == 'sections.about' ? 'true' : 'false' }}">
-                <i><img style="width:25px" src="{{ asset('material') }}/img/laravel.svg"></i>
-                <p>Sections
-                    <b class="caret"></b>
-                </p>
-            </a>
-            <div class="collapse {{ $activePage == 'sections.navbar' || $activePage == 'sections.slider' || $activePage == 'sections.upcoming' || $activePage == 'sections.projects' || $activePage == 'sections.contact' || $activePage == 'sections.about' ? 'show' : '' }}" id="SectionGroupMenu">
-                <ul class="nav">
-                    <li class="nav-item{{ $activePage == 'sections.navbar' ? ' active' : '' }}">
-                        <a class="nav-link" href="{{ route('sections.navbar') }}">
-                            <span class="sidebar-mini"> HS </span>
-                            <span class="sidebar-normal">{{ __('Navbar') }} </span>
-                        </a>
-                    </li>
-                    <li class="nav-item{{ $activePage == 'sections.slider' ? ' active' : '' }}">
-                        <a class="nav-link" href="{{ route('sections.sliders') }}">
-                            <span class="sidebar-mini"> HS </span>
-                            <span class="sidebar-normal">{{ __('Home Slider') }} </span>
-                        </a>
-                    </li>
-                    <li class="nav-item{{ $activePage == 'sections.upcoming' ? ' active' : '' }}">
-                        <a class="nav-link" href="{{ route('sections.upcoming') }}">
-                            <span class="sidebar-mini"> Up </span>
-                            <span class="sidebar-normal">{{ __('Upcoming') }} </span>
-                        </a>
-                    </li>
-                    <li class="nav-item{{ $activePage == 'sections.projects' ? ' active' : '' }}">
-                        <a class="nav-link" href="{{ route('sections.projects') }}">
-                            <span class="sidebar-mini"> Pr </span>
-                            <span class="sidebar-normal">{{ __('Projects') }} </span>
-                        </a>
-                    </li>
-                    <li class="nav-item{{ $activePage == 'sections.gallery*' ? ' active' : '' }}">
-                        <a class="nav-link" href="{{ route('sections.gallery') }}">
-                            <span class="sidebar-mini"> G </span>
-                            <span class="sidebar-normal">{{ __('Gallery') }} </span>
-                        </a>
-                    </li>
-                    <li class="nav-item{{ $activePage == 'sections.contact' ? ' active' : '' }}">
-                        <a class="nav-link" href="{{ route('sections.contact') }}">
-                            <span class="sidebar-mini"> CU </span>
-                            <span class="sidebar-normal">{{ __('Contact Us') }} </span>
-                        </a>
-                    </li>
-                    <li class="nav-item{{ $activePage == 'sections.about*' ? ' active' : '' }}">
-                        <a class="nav-link" href="{{ route('sections.about') }}">
-                            <span class="sidebar-mini"> AU </span>
-                            <span class="sidebar-normal">{{ __('About Us') }} </span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </li>
-
         <li class="nav-item{{ $activePage == 'company.settings' ? ' active' : '' }}">
             <a class="nav-link" href="{{ route('company.settings') }}">
                 <i class="material-icons">android</i>
