@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend\User;
 
 use Illuminate\Http\Request;
 use App\Models\Backend\User;
+use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Artisan;
 use Spatie\Permission\Models\Permission;
@@ -42,6 +43,7 @@ class PermissionsController extends Controller
             }
 
             $this->refreshApp();
+            return ['status' => 'Success', 'message' => 'Permissions revised successfully.'];
 
        } catch (\Throwable $th) {
            return $th;

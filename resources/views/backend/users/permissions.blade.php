@@ -59,17 +59,17 @@
                             <div class="row">
                                 <div class="col-lg-3 col-md-4 col-sm-6 m-t-10" v-show="!search">
                                     <div  class="list-group-item">
-                                        <div class="custom-control custom-checkbox">
+                                        <div class="custom-control custom-checkbox pl-0">
                                             <input type="checkbox" class="custom-control-input" id="checkAll" v-model="allChecked" v-on:change="checkAll()">
-                                            <label class="custom-control-label" for="checkAll">Check All</label>
+                                            <label class="custom-control-label pl-4" for="checkAll">Check All</label>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-3 col-md-4 col-sm-6 m-t-10" v-for="permission in filteredPermissions" :key="permission.id">
                                     <div  class="list-group-item">
-                                        <div class="custom-control custom-checkbox">
+                                        <div class="custom-control custom-checkbox pl-0">
                                             <input type="checkbox" class="custom-control-input" :id="permission.name" :value="permission.name" v-model="form.checkedPermissions">
-                                            <label class="custom-control-label" :for="permission.name">  @{{permission.name}}</label>
+                                            <label class="custom-control-label pl-4" :for="permission.name">  @{{permission.name}}</label>
                                         </div>
                                     </div>
                                 </div>
@@ -183,11 +183,13 @@
                     })
             },
             assignPermisson(){
-                this.form.post('admin.assignPermissions')
+                this.form.post('{{route("admin.assignPermissions")}}')
                     .then(res=>{
-                        this.$toastr.s(
-                            "Your changes has been saved successfully"
-                        )
+                        if(res.data.status == 'Success'){
+                            this.$toastr.success(res.data.message, res.data.status);
+                        } else {
+                            this.$toastr.warning(res.data.message, res.data.status);
+                        }
                     })
                     .catch(e=>{
                         alert(e)

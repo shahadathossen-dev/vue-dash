@@ -126,6 +126,16 @@ Route::middleware('auth:admin')->group(function(){
         Route::get('parivacy-policy', "CompanyController@privacyPolicy")->name('privacy-policy');
     });
 
+    Route::prefix('system')->name('system.')->middleware('permission:manage access-logs')
+                            ->namespace('Backend\System')->group(function () {
+        // Activity log routes
+        Route::get('/access-log/panel', "ActivityLogController@panel")->name('access-log.panel');
+        Route::get('/access-log', "ActivityLogController@accessLogs")->name('access-log.index');
+        Route::post('/access-log/user', "ActivityLogController@accessLogs")->name('access-log.fetch');
+        Route::post('/access-log/view', "ActivityLogController@show")->name('access-log.show');
+        Route::get('/access-logs/datatable', "ActivityLogController@dataTable")->name('access-log.datatable');
+    });
+
 
 });
 

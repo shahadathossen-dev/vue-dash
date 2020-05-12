@@ -48,7 +48,7 @@ class RolesController extends Controller
         $newRole = Role::create($request->all());
         if($newRole)
         {
-            return ['status' => 'success', 'message' => 'New role created successfully.'];
+            return ['status' => 'Success', 'message' => 'New role created successfully.'];
         } else {
 
             return ['status' => 'warning', 'messsage' => 'Something went wrong!'];
@@ -102,7 +102,7 @@ class RolesController extends Controller
 
         if($role->update($request->all()))
         {
-            return ['status' => 'success', 'message' => 'Role deleted successfully.'];
+            return ['status' => 'Success', 'message' => 'Role deleted successfully.'];
         } else {
             return ['status' => 'warning', 'messsage' => 'Something went wrong!'];
         }
@@ -118,7 +118,7 @@ class RolesController extends Controller
     {
         try {
             $role->delete();
-            return ['status' => 'success', 'message' => 'Role deleted successfully.'];
+            return ['status' => 'Success', 'message' => 'Role deleted successfully.'];
         } catch (\Throwable $th) {
             return $th;
         }
@@ -140,10 +140,20 @@ class RolesController extends Controller
         $user= User::find($request->user);
         if($user->syncRoles($request->role))
         {
-            return ['status' => 'success', 'message' => 'New role assigned successfully.'];
+            $this->refreshApp();
+            return ['status' => 'Success', 'message' => 'New role assigned successfully.'];
         } else {
 
             return ['status' => 'warning', 'messsage' => 'Something went wrong!'];
         }
+    }
+
+    public function refreshApp()
+    {
+        $configClear = Artisan::call('config:clear');
+        $cacheClear = Artisan::call('cache:clear');
+        $routeClear = Artisan::call('route:cache');
+        // $viewClear = Artisan::call('view:cache');
+        return true; //Return anything
     }
 }

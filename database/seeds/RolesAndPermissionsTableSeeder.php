@@ -33,16 +33,9 @@ class RolesAndPermissionsTableSeeder extends Seeder
         Permission::create(['name' => 'manage status', 'guard_name' => 'admin']);
         Permission::create(['name' => 'assign status', 'guard_name' => 'admin']);
 
-        // sections permissions
-        Permission::create(['name' => 'manage sections', 'guard_name' => 'admin']);
-
         // system permissions
         Permission::create(['name' => 'manage company-settings', 'guard_name' => 'admin']);
         Permission::create(['name' => 'manage access-logs', 'guard_name' => 'admin']);
-
-        // message permissions
-        Permission::create(['name' => 'read messages', 'guard_name' => 'admin']);
-        Permission::create(['name' => 'reply messages', 'guard_name' => 'admin']);
 
         // create roles and assign created permissions
 
