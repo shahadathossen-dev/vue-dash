@@ -1,98 +1,111 @@
-@extends('layouts.app')
-
-@section('title')
-    Roles
-@endsection
+@extends('backend.layouts.app', ['activePage' => 'users.panel', 'title' => 'User Roles'])
 
 @push('styles')
-    <link rel="stylesheet" href="{{asset('css/app.css')}}">
+<link rel="stylesheet" type="text/css" href="{{asset('material')}}/plugins/DataTables/media/css/jquery.dataTables.css">
+<link rel="stylesheet" type="text/css" href="{{asset('material')}}/plugins/DataTables/media/css/dataTables.bootstrap.css">
 @endpush
 
 @section('content')
-<div class="container-fluid" id="role">
-        <!-- ============================================================== -->
-        <!-- Start Page Content -->
-        <!-- ============================================================== -->
-        <div class="row">
-            <!-- Column -->
-            <div class="col-lg-8 col-xl-8 col-md-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex no-block align-items-center m-b-10">
-                            <h4 class="card-title">All Roles</h4>
+<div class="main-panel" id="app">
+    {{-- Navbar Section --}}
+    @include('backend.layouts.navbars.navs.auth', ['title' => 'User Roles'])
+    {{-- // Navbar Section --}}
+
+    <main class="content">
+        <div class="container-fluid">
+            <div class="card mb-0">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card-header card-header-warning">
+                            <h4 class="card-title">User Roles</h4>
                         </div>
-                        <div class="table-responsive">
-                            <table id="data_table" class="table table-bordered nowrap display">
-                                <thead>
-                                    <tr>
-                                        <th>ID/th>
-                                        <th>Role Name</th>
-                                        <th>Edit</th>
-                                        <th>Delete</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Column -->
-            <!-- Column -->
-            <div class="col-lg-4 col-xl-4 col-md-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex no-block align-items-center m-b-10">
-                            <h4 v-show="!editMode" class="card-title">Create Role</h4>
-                            <h4 v-show="editMode" class="card-title">Edit Role</h4>
-                        </div>
-                        <form @submit.prevent="editMode ? updateRole():saveRole()">
-                            @csrf
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="ti-id-badge"></i></span>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-8 col-xl-8 col-md-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="d-flex no-block align-items-center m-b-10">
+                                                <h4 class="card-title">All Roles</h4>
+                                            </div>
+                                            <div class="">
+                                                <table id="data_table" class="table table-bordered nowrap display">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>ID</th>
+                                                            <th>Role Name</th>
+                                                            <th>Edit</th>
+                                                            <th>Delete</th>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <input v-model="form.name" type="text" name="name" :class="{ 'is-invalid': form.errors.has('name') }" class="form-control" placeholder="Name">
-                                <has-error :form="form" field="name"></has-error>
+                                <!-- Column -->
+                                <!-- Column -->
+                                <div class="col-lg-4 col-xl-4 col-md-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="d-flex no-block align-items-center m-b-10">
+                                                <h4 v-show="!editMode" class="card-title">Create Role</h4>
+                                                <h4 v-show="editMode" class="card-title">Edit Role</h4>
+                                            </div>
+                                            <form @submit.prevent="editMode ? updateRole():saveRole()">
+                                                @csrf
+                                                <div class="input-group mb-3">
+                                                    <input v-model="form.name" type="text" name="name" :class="{ 'is-invalid': form.errors.has('name') }" class="form-control" placeholder="Name">
+                                                    <has-error :form="form" field="name"></has-error>
+                                                </div>
+                                                @if ($errors->has('name'))
+                                                    <div class="error text-danger mb-3">{{ $errors->first('name') }}</div>
+                                                @endif
+                                                <button v-show="disabled"  disabled type="submit" class="btn btn-success btn-block"><i class="ti-save m-r-5"></i> Update</button>
+                                                <button v-show="!disabled" type="submit" class="btn btn-success btn-block"><i class="ti-save m-r-5"></i> Save</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="d-flex no-block align-items-center m-b-10">
+                                                <h4 class="card-title">Assign Role</h4>
+                                            </div>
+                                            <form @submit.prevent = "assignRole()">
+                                                <label for="">Select User</label>
+                                                <div class="input-group mb-3">
+                                                    <select  v-model="form2.user" name="user" class="form-control" :class="{ 'is-invalid': form2.errors.has('user') }">
+                                                        <option v-for='user in users' :key='user.id' :value='user.id'>@{{user.username}}</option>
+                                                    </select>
+                                                    <has-error :form="form2" field="user"></has-error>
+                                                </div>
+                                                <label for="">Select Role</label>
+                                                <div class="input-group mb-3">
+                                                    <select  v-model="form2.role" name="role" class="form-control" :class="{ 'is-invalid': form2.errors.has('role') }">
+                                                        <option v-for='role in roles' :key='role.name' :value='role.name'>@{{role.name}}</option>
+                                                    </select>
+                                                    <has-error :form="form2" field="role"></has-error>
+                                                </div>
+                                                <button :disabled="form.busy" type="submit" class="btn btn-success btn-block"><i class="ti-save m-r-5"></i> Save</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Column -->
                             </div>
-                            @if ($errors->has('name'))
-                                <div class="error text-danger mb-3">{{ $errors->first('name') }}</div>
-                            @endif
-                            <button v-show="disabled"  disabled type="submit" class="btn btn-success btn-block"><i class="ti-save m-r-5"></i> Update</button>
-                            <button v-show="!disabled" type="submit" class="btn btn-success btn-block"><i class="ti-save m-r-5"></i> Save</button>
-                        </form>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex no-block align-items-center m-b-10">
-                            <h4 class="card-title">Assign Role</h4>
                         </div>
-                        <form @submit.prevent = "assignRole()">
-                            <label for="">Select User</label>
-                            <div class="input-group mb-3">
-                                <select  v-model="form2.user" name="user" class="form-control" :class="{ 'is-invalid': form2.errors.has('user') }">
-                                    <option v-for='user in users' :key='user.id' :value='user.id'>@{{user.username}}</option>
-                                </select>
-                                <has-error :form="form2" field="user"></has-error>
-                            </div>
-                            <label for="">Select Role</label>
-                            <div class="input-group mb-3">
-                                <select  v-model="form2.role" name="role" class="form-control" :class="{ 'is-invalid': form2.errors.has('role') }">
-                                    <option v-for='role in roles' :key='role.name' :value='role.name'>@{{role.name}}</option>
-                                </select>
-                                <has-error :form="form2" field="role"></has-error>
-                            </div>
-                            <button :disabled="form.busy" type="submit" class="btn btn-success btn-block"><i class="ti-save m-r-5"></i> Save</button>
-                        </form>
                     </div>
                 </div>
             </div>
-            <!-- Column -->
         </div>
         <!-- ============================================================== -->
         <!-- End PAge Content -->
         <!-- ============================================================== -->
-    </div>
+    </main>
+
+    {{-- Footer Section --}}
+    @include('backend.layouts.footers.auth')
+    {{-- Footer Section --}}
+</div>
 @endsection
 
 
@@ -149,32 +162,45 @@
 
 
 const app = new Vue({
-        el: '#role',
+        el: '#app',
 
         data:{
+            authUser : '{{auth("admin")->user()->id}}',
+            notifications: [],
             disabled: false,
             editMode: false,
             users: [],
             roles: [],
             form: new Form({
                     id: '',
-                    name: ''
+                    name: '',
             }),
             form2 : new Form({
                 user: '',
                 role: ''
             })
         },
+        filters: {
+            dateTime: function (datetime) {
+                if (!datetime) {
+                    return 'N/A'
+                }
+                return moment(datetime).format('YYYY-MM-DD HH:mm:ss');
+                // return moment(date, 'YYYY-MM-DD').format(format);
+            },
+        },
         methods:{
             saveRole(){
                 this.disabled = true;
-                this.form.post('admin/roles')
-                    .then(response => {
+                this.form.post('{{route("admin.roles.store")}}')
+                    .then(res => {
                         this.disabled = false
                         this.form.reset()
-                        this.$toastr.s(
-                            "Role created successfully"
-                        )
+                        if(res.data.status == 'Success'){
+                            this.$toastr.success(res.data.message, res.data.status);
+                        } else {
+                            this.$toastr.warning(res.data.message, res.data.status);
+                        }
                         getRoles()
                         this.getRolesName()
                     })
@@ -190,14 +216,16 @@ const app = new Vue({
             },
             updateRole(){
                 this.disabled = true;
-                this.form.put(`admin/roles/${this.form.id}`)
-                    .then(response=>{
+                this.form.put(`/admin/roles/${this.form.id}`)
+                    .then(res=>{
                         this.form.reset()
                         this.disabled = false;
                         this.editMode = false;
-                        this.$toastr.s(
-                            "Role updated successfully"
-                        )
+                        if(res.data.status == 'Success'){
+                            this.$toastr.success(res.data.message, res.data.status);
+                        } else {
+                            this.$toastr.warning(res.data.message, res.data.status);
+                        }
                         getRoles()
                         this.getRolesName()
                     })
@@ -208,12 +236,13 @@ const app = new Vue({
                     })
             },
             delete(id){
-                this.form.delete(`admin/roles/${id}`)
+                this.form.delete(`/admin/roles/${id}`)
                     .then(res=>{
-                        console.log(res.data)
-                        this.$toastr.s(
-                            "Role deleted successfully"
-                        );
+                        if(res.data.status == 'Success'){
+                            this.$toastr.success(res.data.message, res.data.status);
+                        } else {
+                            this.$toastr.warning(res.data.message, res.data.status);
+                        }
                         getRoles();
                         this.getRolesName()
                     })
@@ -242,9 +271,11 @@ const app = new Vue({
             assignRole(){
                 this.form2.post('admin.roles.assignRole')
                     .then(res=>{
-                        this.$toastr.s(
-                            "Role assigned successfully"
-                        )
+                        if(res.data.status == 'Success'){
+                            this.$toastr.success(res.data.message, res.data.status);
+                        } else {
+                            this.$toastr.warning(res.data.message, res.data.status);
+                        }
                         this.form2.reset();
                     })
                     .catch(e=>{

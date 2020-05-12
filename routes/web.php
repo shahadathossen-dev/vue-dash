@@ -74,15 +74,15 @@ Route::prefix('admin')->namespace('Backend')->group(function(){
             Route::get('/users/{user}/approve', "UserController@approveUser")->name('admin.users.approve');
 
             Route::namespace('User')->name('admin.')->group(function(){
-                // Roles Routes
+                 // Roles Routes
                 Route::resource('roles', "RolesController")->middleware('permission:manage roles');
                 Route::get('/roles/get/all', 'RolesController@roles')->name('roles');
                 Route::post('/assignRole', "RolesController@assignRole")->name('roles.assignRole')->middleware('permission:assign roles');
-                Route::get('/roles/get/datatable', "RolesController@dataTable")->name('roles.datatable')->middleware('permission:read roles');
+                Route::get('/roles/get/datatable', "RolesController@dataTable")->name('roles.datatable')->middleware('permission:manage roles');
 
                 // Roles Routes
                 Route::resource('statuses', "StatusController")->middleware('permission:manage status');
-                Route::get('/statuses/get/datatable', "StatusController@dataTable")->name('statuses.datatable')->middleware('permission:read roles');
+                Route::get('/statuses/get/datatable', "StatusController@dataTable")->name('statuses.datatable')->middleware('permission:manage status');
                 Route::get('/statuses/get/all', 'StatusController@statuses')->name('statuses');
                 Route::post('/assignStatus', "StatusController@assignStatus")->name('statuses.updateStatus')->middleware('permission:assign status');
 
@@ -90,8 +90,8 @@ Route::prefix('admin')->namespace('Backend')->group(function(){
                 Route::resource('permissions', "PermissionsController")->middleware('permission:manage permissions');
                 Route::get('/permissions/get/all', "PermissionsController@permissions")->name('permissions');
                 Route::post('/assignPermissions', "PermissionsController@assignPermissions")->name('assignPermissions')->middleware('permission:assign permissions');
-                Route::post('/getUserPermissions', "PermissionsController@getUserPermissions")->name('getUserPermissions')->middleware('permission:read user-permissions');
-                Route::post('/getRolePermissions', "PermissionsController@getRolePermissions")->name('getRolePermissions')->middleware('permission:read role-permissions');
+                Route::post('/getUserPermissions', "PermissionsController@getUserPermissions")->name('getUserPermissions')->middleware('permission:manage user-permissions');
+                Route::post('/getRolePermissions', "PermissionsController@getRolePermissions")->name('getRolePermissions')->middleware('permission:manage role-permissions');
             });
 
         });

@@ -7,6 +7,7 @@ use App\Models\Backend\User;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
 use App\Models\Backend\User\Status;
+use Yajra\DataTables\Facades\DataTables;
 
 use App\Http\Controllers\Controller;
 
@@ -44,7 +45,14 @@ class RolesController extends Controller
             'name' => 'required|string|max:45|unique:roles',
         ]);
 
-        return Role::create($request->all());
+        $newRole = Role::create($request->all());
+        if($newRole)
+        {
+            return ['status' => 'success', 'message' => 'New role created successfully.'];
+        } else {
+
+            return ['status' => 'warning', 'messsage' => 'Something went wrong!'];
+        }
     }
 
     /**
@@ -92,8 +100,12 @@ class RolesController extends Controller
             'name' => 'required|string|max:191|unique:roles,name,'.$request->id,
         ]);
 
-        $role->update($request->all());
-        return $role;
+        if($role->update($request->all()))
+        {
+            return ['status' => 'success', 'message' => 'Role deleted successfully.'];
+        } else {
+            return ['status' => 'warning', 'messsage' => 'Something went wrong!'];
+        }
     }
 
     /**
@@ -106,7 +118,7 @@ class RolesController extends Controller
     {
         try {
             $role->delete();
-            return "Role deleted successfully";
+            return ['status' => 'success', 'message' => 'Role deleted successfully.'];
         } catch (\Throwable $th) {
             return $th;
         }
@@ -126,6 +138,12 @@ class RolesController extends Controller
         );
 
         $user= User::find($request->user);
-        return $user->assignRole($request->role);
+        if($user->syncRoles($request->role))
+        {
+            return ['status' => 'success', 'message' => 'New role assigned successfully.'];
+        } else {
+
+            return ['status' => 'warning', 'messsage' => 'Something went wrong!'];
+        }
     }
 }

@@ -17,7 +17,7 @@ class PermissionsController extends Controller
      */
     public function index()
     {
-        return view('pages.permission.index');
+        return view('backend.users.permissions');
     }
 
     public function assignPermissions(Request $request)
