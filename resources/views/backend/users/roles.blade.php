@@ -190,6 +190,17 @@ const app = new Vue({
             },
         },
         methods:{
+            getNotifications(){
+                axios.get('{{route("notifications.unread")}}')
+                    .then(res=>{
+                        this.$nextTick(function () {
+                            this.notifications = res.data;
+                        });
+                    })
+                    .catch(e=>{
+                        alert(e);
+                    })
+            },
             saveRole(){
                 this.disabled = true;
                 this.form.post('{{route("admin.roles.store")}}')
