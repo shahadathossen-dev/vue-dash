@@ -34,11 +34,13 @@ Route::prefix('admin')->namespace('Backend')->group(function(){
     Route::post('password/create', 'Auth\ResetPasswordController@createPassword')->name('admin.create.password');
     Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('admin.password.resetForm');
     Route::post('password/reset', 'Auth\ResetPasswordController@reset')->name('admin.password.reset');
+    
+    Route::get('/', 'HomeController@index')->middleware('auth:admin')->name('dashboard');
+    Route::get('dashboard', 'HomeController@index')->middleware('auth:admin')->name('admin.home');
+    Route::post('logout', 'Auth\LoginController@logout')->middleware('auth:admin')->name('admin.logout');
 
-    Route::middleware('auth:admin')->group(function(){
-        Route::get('/', 'HomeController@index')->name('dashboard');
-        Route::get('dashboard', 'HomeController@index')->name('admin.home');
-        Route::post('logout', 'Auth\LoginController@logout')->name('admin.logout');
+    Route::middleware(['auth:admin', 'watch_dog'])->group(function(){
+        
 
         //User Section
         Route::prefix('users')->group(function(){
