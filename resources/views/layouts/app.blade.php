@@ -330,9 +330,7 @@
         });
     });
 
-
     </script>
-    <!-- Owl Carousel Slide -->
 
     {{-- <script src="{{asset('js/app.js')}}"></script> --}}
     <!-- start-smoth-scrolling -->
