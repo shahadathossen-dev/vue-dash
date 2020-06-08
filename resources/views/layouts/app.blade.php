@@ -599,17 +599,6 @@
             alert.slideUp();
         })
 
-        $('.refresh-button').click(function(event) {
-            event.preventDefault();
-            $.ajax({
-                type: 'get',
-                url: '{{ route("refreshCaptcha") }}',
-                success:function(data) {
-                    $('.captcha-image').html(data.captcha);
-                }
-            });
-        });
-
     });
     </script>
     <!-- Owl Carousel Slide -->
